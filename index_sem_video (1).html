@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InovaCom 3D — Campus Nova Iguaçu | Impressão 3D e Manufatura Aditiva</title>
+<!-- Chart.js para gráficos interativos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --primary-dark: #0F172A;
+            --primary-blue: #1E3A8A;
+            --vibrant-blue: #0284C7;
+            --teal-accent: #0D9488;
+            --teal-light: #CCFBF1;
+            --blue-light: #E0F2FE;
+            --text-main: #1E293B;
+            --text-muted: #475569;
+            --border-color: #E2E8F0;
+            --chart-green: #10B981;
+            --chart-blue: #0284C7;
+            --chart-orange: #F59E0B;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-main);
+            line-height: 1.6;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Cabeçalho e Navegação Fixa Mobile-First */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-badge {
+            background: var(--primary-blue);
+            color: #fff;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 2px;
+            scrollbar-width: none;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.45rem 0.75rem;
+            border-radius: 8px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            color: var(--vibrant-blue);
+            background: var(--blue-light);
+        }
+
+        /* Layout Padrão de Seções */
+        main {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 1.25rem 4rem;
+        }
+
+        section {
+            padding-top: 3.5rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: var(--blue-light);
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            margin-bottom: 0.6rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 2.15rem);
+            color: var(--primary-dark);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            max-width: 720px;
+        }
+
+        /* Hero / Página Inicial */
+        .hero {
+            padding-top: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .hero-card {
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 2.25rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border-bottom: 4px solid var(--teal-accent);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(13, 148, 136, 0.25);
+            border: 1px solid rgba(45, 212, 191, 0.4);
+            color: #5EEAD4;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.85rem, 5vw, 2.75rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p.subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: #CBD5E1;
+            max-width: 640px;
+            margin-bottom: 1.75rem;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.9rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--vibrant-blue);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: #0369A1;
+        }
+
+        .btn-teal {
+            background: var(--teal-accent);
+            color: #FFFFFF;
+        }
+
+        .btn-teal:hover {
+            background: #0F766E;
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* Destaques Rápidos na Home */
+        .home-highlights {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .home-highlights {
+                grid-template-columns: 1.15fr 0.85fr;
+            }
+            .hero-card {
+                padding: 3rem 2.5rem;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Grade de Navegação Rápida da Home */
+        .quick-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+            gap: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .nav-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.1rem;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .nav-card:hover {
+            border-color: var(--vibrant-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-card-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: var(--blue-light);
+            color: var(--vibrant-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .nav-card h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .nav-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        /* 3.1 O que é Impressão 3D */
+        .comparison-two-col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .comparison-two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .process-badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .badge-additive {
+            background: var(--teal-light);
+            color: #0F766E;
+        }
+
+        .badge-subtractive {
+            background: #F1F5F9;
+            color: #475569;
+        }
+
+        /* 3.2 Componentes FDM + Animação SVG */
+        .fdm-showcase {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media (min-width: 900px) {
+            .fdm-showcase {
+                grid-template-columns: 1fr 1.15fr;
+            }
+        }
+
+        .animation-box {
+            background: var(--primary-dark);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            color: #fff;
+            text-align: center;
+            position: sticky;
+            top: 4.5rem;
+        }
+
+        .svg-printer {
+            width: 100%;
+            max-width: 360px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Animação CSS do cabeçote de impressão */
+        @keyframes moveNozzle {
+            0% { transform: translateX(-55px); }
+            50% { transform: translateX(55px); }
+            100% { transform: translateX(-55px); }
+        }
+
+        @keyframes pulseLayer {
+            0%, 100% { opacity: 0.75; }
+            50% { opacity: 1; }
+        }
+
+        .animated-head {
+            animation: moveNozzle 4s ease-in-out infinite;
+        }
+
+        .printed-layer-top {
+            animation: pulseLayer 2s ease-in-out infinite;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 0.85rem;
+        }
+
+        .comp-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .comp-item:hover, .comp-item.active {
+            border-color: var(--vibrant-blue);
+            background: #F0F9FF;
+        }
+
+        .comp-num {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+        }
+
+        .comp-item h4 {
+            display: inline;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        .comp-item p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            margin-top: 0.45rem;
+        }
+
+        /* 3.3 Fluxograma de 7 Etapas */
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            position: relative;
+            border-top: 4px solid var(--vibrant-blue);
+        }
+
+        .step-number {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--vibrant-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+
+        .step-card h4 {
+            font-size: 1rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .step-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* 3.4 Tabela/Cartões PLA vs PETG */
+        .material-table-wrapper {
+            overflow-x: auto;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        table.material-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 540px;
+        }
+
+        table.material-comparison th,
+        table.material-comparison td {
+            padding: 1rem 1.15rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        table.material-comparison th {
+            background: #F1F5F9;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .col-pla {
+            border-left: 3px solid var(--vibrant-blue);
+        }
+
+        .col-petg {
+            border-left: 3px solid var(--teal-accent);
+        }
+
+        .note-box {
+            background: #FFFBEB;
+            border-left: 4px solid #F59E0B;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #92400E;
+            margin-top: 1rem;
+        }
+
+        /* 3.5 Aplicações */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .app-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+        }
+
+        .app-card h4 {
+            color: var(--primary-blue);
+            font-size: 0.98rem;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .app-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* 3.6 Vantagens e Limitações */
+        .pros-cons-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.85rem;
+        }
+
+        .pros-cons-list li {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+        }
+
+        .icon-pro {
+            color: var(--teal-accent);
+            font-weight: 800;
+        }
+
+        .icon-con {
+            color: #D97706;
+            font-weight: 800;
+        }
+
+        /* 3.7 Curiosidades */
+        .curiosity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .curiosity-card {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.35rem;
+        }
+
+        .curiosity-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--teal-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* 4. InovaCom 3D Espaços Reservados */
+
+        /* 5. Gráficos e Resultados em Números */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.75rem;
+        }
+
+        @media (min-width: 900px) {
+            .charts-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .canvas-holder {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            margin: 1.25rem auto;
+        }
+
+        .bar-canvas-holder {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            margin: 1.25rem auto;
+        }
+
+        .interactive-filter-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.75rem 0;
+        }
+
+        .cat-chip {
+            border: 1px solid var(--border-color);
+            background: #F8FAFC;
+            padding: 0.45rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .cat-chip:hover, .cat-chip.active {
+            background: var(--primary-dark);
+            color: #fff;
+            border-color: var(--primary-dark);
+        }
+
+        .selected-cat-readout {
+            background: #F1F5F9;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-banner-27 {
+            background: var(--blue-light);
+            border-left: 4px solid var(--vibrant-blue);
+            color: var(--primary-blue);
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin: 0.75rem 0;
+        }
+
+        .analysis-box {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+        }
+
+        /* 5.3 Resumo Visual 7 Cartões */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.85rem;
+            margin-top: 1.25rem;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .kpi-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            line-height: 1.2;
+        }
+
+        .kpi-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        footer {
+            background: var(--primary-dark);
+            color: #94A3B8;
+            text-align: center;
+            padding: 2.5rem 1.25rem;
+            font-size: 0.85rem;
+            border-top: 1px solid #1E293B;
+        }
+
+        footer strong {
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegação Principal -->
+    <header>
+        <div class="nav-container">
+            <a href="#inicio" class="brand">
+                <span class="brand-badge">3D</span>
+                <span>InovaCom 3D</span>
+            </a>
+            <nav class="nav-links" aria-label="Navegação principal">
+                <a href="#fundamentos">O que é?</a>
+                <a href="#como-funciona">Impressora FDM</a>
+                <a href="#fluxo">Etapas</a>
+                <a href="#materiais">PLA vs PETG</a>
+                <a href="#resultados">Resultados</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. PÁGINA INICIAL (HERO + DESTAQUES) -->
+        <section id="inicio" class="hero">
+            <div class="hero-card">
+                <div class="hero-badge">
+                    <span>● Projeto InovaCom 3D — Campus Nova Iguaçu</span>
+                </div>
+                <h1>Descubra o mundo da Impressão 3D</h1>
+                <p class="subtitle">
+                    "Explore a tecnologia que transforma ideias digitais em objetos reais, camada por camada."
+                </p>
+                <div class="btn-group">
+                    <a href="#fundamentos" class="btn btn-primary">Começar a explorar</a>
+                    <a href="#resultados" class="btn btn-outline">Ver números do laboratório</a>
+                </div>
+            </div>
+
+            <!-- Cartões de Destaque na Página Inicial -->
+            <div class="home-highlights">
+                <!-- Apresentação resumida InovaCom 3D + Resultados -->
+                <div class="card">
+                    <span class="section-tag">Divulgação Científica & Ensino</span>
+                    <h2 style="font-size: 1.25rem; color: var(--primary-dark); margin-bottom: 0.5rem;">
+                        Manufatura Aditiva no Campus Nova Iguaçu
+                    </h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        O projeto <strong>InovaCom 3D</strong> promove o ensino prático e a disseminação de conhecimentos sobre modelagem tridimensional e fabricação digital entre estudantes e visitantes.
+                    </p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; background: #F8FAFC; padding: 0.9rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-blue);">43</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted);">Impressões registradas nos projetos</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--teal-accent);">10,426 kg</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted);">Filamentos PLA + PETG consumidos</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cartões interativos para navegar pelos conteúdos -->
+            <div>
+                <h2 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.65rem; font-weight: 700;">
+                    NAVEGAÇÃO RÁPIDA PELO CONTEÚDO
+                </h2>
+                <div class="quick-nav-grid">
+                    <a href="#fundamentos" class="nav-card">
+                        <div class="nav-card-icon">01</div>
+                        <h3>O que é Impressão 3D?</h3>
+                        <p>Manufatura aditiva vs. processos tradicionais.</p>
+                    </a>
+                    <a href="#como-funciona" class="nav-card">
+                        <div class="nav-card-icon">02</div>
+                        <h3>Como Funciona (FDM)</h3>
+                        <p>Animação interativa e os 8 componentes.</p>
+                    </a>
+                    <a href="#fluxo" class="nav-card">
+                        <div class="nav-card-icon">03</div>
+                        <h3>Do Digital ao Físico</h3>
+                        <p>Fluxograma completo em 7 etapas.</p>
+                    </a>
+                    <a href="#materiais" class="nav-card">
+                        <div class="nav-card-icon">04</div>
+                        <h3>PLA vs. PETG</h3>
+                        <p>Comparativo técnico de propriedades.</p>
+                    </a>
+                    <a href="#resultados" class="nav-card">
+                        <div class="nav-card-icon">05</div>
+                        <h3>Dados do Laboratório</h3>
+                        <p>Gráficos interativos de produção e consumo.</p>
+                    </a>
+                    <a href="#inovacom" class="nav-card">
+                        <div class="nav-card-icon">06</div>
+                        <h3>Sobre o InovaCom 3D</h3>
+                        <p>Ensino de engenharia e espaço do laboratório.</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.1 O QUE É IMPRESSÃO 3D? -->
+        <section id="fundamentos">
+            <div class="section-header">
+                <span class="section-tag">3.1 Conceito Fundamental</span>
+                <h2 class="section-title">O que é impressão 3D?</h2>
+                <p class="section-subtitle">
+                    A impressão 3D, tecnicamente denominada <strong>manufatura aditiva</strong>, é um processo de fabricação que constrói objetos tridimensionais físicos a partir de um modelo digital, depositando material sucessivamente, <strong>camada por camada</strong>.
+                </p>
+            </div>
+
+            <div class="comparison-two-col">
+                <div class="card">
+                    <span class="process-badge badge-additive">Manufatura Aditiva (Impressão 3D)</span>
+                    <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--primary-dark);">Adição sucessiva de camadas</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        O material é depositado apenas onde é necessário para formar a geometria da peça. Isso permite criar canais internos ocos, estruturas celulares leves e geometrias complexas diretamente do arquivo digital sem necessidade de moldes.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="process-badge badge-subtractive">Processos Tradicionais (Ex.: Usinagem)</span>
+                    <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--primary-dark);">Remoção de material (Substrativa)</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        Em processos como fresamento e torneamento, parte-se de um bloco maciço (tarugo) e retira-se material na forma de cavaco até atingir a forma final. Já a conformação e a injeção exigem ferramental e moldes dedicados de alto custo inicial.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.2 COMO FUNCIONA UMA IMPRESSORA 3D (FDM) -->
+        <section id="como-funciona">
+            <div class="section-header">
+                <span class="section-tag">3.2 Tecnologia FDM / FFF</span>
+                <h2 class="section-title">Como funciona uma impressora 3D?</h2>
+                <p class="section-subtitle">
+                    Na modelagem por fusão e deposição (FDM), um filamento termoplástico é tracionado, fundido em um cabeçote aquecido e depositado com precisão nos eixos X, Y e Z. Toque nos componentes para destacá-los.
+                </p>
+            </div>
+
+            <div class="fdm-showcase">
+                <!-- Ilustração SVG Animada e Identificada -->
+                <div class="animation-box">
+                    <div style="font-size: 0.8rem; color: #5EEAD4; font-weight: 700; margin-bottom: 0.5rem;">
+                        SIMULAÇÃO: DEPOSIÇÃO CAMADA POR CAMADA
+                    </div>
+                    <svg class="svg-printer" viewBox="0 0 360 300" aria-label="Esquema animado de uma impressora 3D FDM">
+                        <!-- Estrutura / Pórtico (Eixos X e Z) -->
+                        <rect x="35" y="25" width="12" height="235" fill="#334155" rx="4"/>
+                        <rect x="313" y="25" width="12" height="235" fill="#334155" rx="4"/>
+                        <rect x="25" y="25" width="310" height="14" fill="#475569" rx="4"/>
+                        <!-- Guia Horizontal Eixo X -->
+                        <line x1="47" y1="115" x2="313" y2="115" stroke="#94A3B8" stroke-width="6"/>
+                        
+                        <!-- Bobina de Filamento (1) -->
+                        <circle cx="80" cy="58" r="24" fill="none" stroke="#0284C7" stroke-width="8"/>
+                        <circle cx="80" cy="58" r="8" fill="#64748B"/>
+                        <text x="80" y="20" fill="#38BDF8" font-size="10" text-anchor="middle" font-weight="bold">1. Filamento</text>
+
+                        <!-- Cabeçote Móvel Animado (Extrusor + Hotend + Bico) -->
+                        <g class="animated-head">
+                            <!-- Fio do filamento entrando -->
+                            <path d="M 150,45 Q 180,65 180,85" fill="none" stroke="#38BDF8" stroke-width="3"/>
+                            <!-- 2. Extrusor -->
+                            <rect x="158" y="82" width="44" height="30" fill="#0284C7" rx="4"/>
+                            <circle cx="172" cy="97" r="6" fill="#0F172A"/>
+                            <circle cx="188" cy="97" r="5" fill="#E2E8F0"/>
+                            <!-- 3. Hotend (Dissipador + Bloco Aquecedor) -->
+                            <rect x="166" y="112" width="28" height="22" fill="#64748B" rx="2"/>
+                            <rect x="168" y="134" width="24" height="12" fill="#EF4444" rx="2"/>
+                            <!-- 4. Bico de Impressão (Nozzle) -->
+                            <polygon points="173,146 187,146 182,158 178,158" fill="#F59E0B"/>
+                            <!-- Filamento fundido saindo -->
+                            <line x1="180" y1="158" x2="180" y2="175" stroke="#10B981" stroke-width="4"/>
+                        </g>
+
+                        <!-- Peça sendo construída em camadas -->
+                        <g>
+                            <rect x="115" y="211" width="130" height="9" fill="#0D9488" rx="4"/>
+                            <rect x="120" y="202" width="120" height="9" fill="#14B8A6" rx="4"/>
+                            <rect x="125" y="193" width="110" height="9" fill="#0D9488" rx="4"/>
+                            <rect x="130" y="184" width="100" height="9" fill="#14B8A6" rx="4"/>
+                            <rect class="printed-layer-top" x="135" y="175" width="90" height="9" fill="#2DD4BF" rx="4"/>
+                        </g>
+
+                        <!-- 5. Mesa de Impressão -->
+                        <rect x="70" y="220" width="220" height="10" fill="#E2E8F0" rx="3"/>
+                        <rect x="85" y="230" width="190" height="6" fill="#EF4444" rx="2"/>
+                        <text x="180" y="250" fill="#CBD5E1" font-size="11" text-anchor="middle" font-weight="bold">5. Mesa de Impressão (Eixo Y)</text>
+
+                        <!-- 6. Motores de Passo e 8. Controle -->
+                        <rect x="33" y="232" width="24" height="24" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="3"/>
+                        <text x="45" y="272" fill="#94A3B8" font-size="10" text-anchor="middle">6. Motores</text>
+
+                        <rect x="275" y="232" width="52" height="26" fill="#0F766E" stroke="#5EEAD4" stroke-width="1.5" rx="4"/>
+                        <text x="301" y="249" fill="#FFFFFF" font-size="9" text-anchor="middle" font-weight="bold">8. Controle</text>
+                    </svg>
+                    <p id="component-Status-Text" style="font-size: 0.85rem; color: #CBD5E1; margin-top: 0.75rem; min-height: 2.6em;">
+                        O bico (4) percorre as coordenadas depositando o polímero fundido sobre a mesa (5), camada após camada.
+                    </p>
+                </div>
+
+                <!-- Lista dos 8 Componentes Obrigatórios -->
+                <div class="components-grid">
+                    <div class="comp-item" onclick="highlightComp(this, 'Filamento: Fio termoplástico (como PLA ou PETG) acondicionado em bobina que serve de matéria-prima.')">
+                        <span class="comp-num">1</span>
+                        <h4>Filamento</h4>
+                        <p>Matéria-prima termoplástica fornecida em carretel com diâmetro padronizado (geralmente 1,75 mm).</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Extrusor: Mecanismo com engrenagens que traciona e empurra o filamento de forma controlada até a zona quente.')">
+                        <span class="comp-num">2</span>
+                        <h4>Extrusor</h4>
+                        <p>Conjunto mecânico que traciona e controla o avanço ou retração do filamento rumo ao aquecedor.</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Hotend: Conjunto térmico que mantém a zona fria isolada e funde o polímero no bloco aquecedor.')">
+                        <span class="comp-num">3</span>
+                        <h4>Hotend</h4>
+                        <p>Sistema térmico composto por dissipador, garganta e bloco aquecedor responsável por fundir o polímero.</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Bico de impressão (Nozzle): Orifício calibrado (ex.: 0,4 mm) por onde o plástico fundido é depositado.')">
+                        <span class="comp-num">4</span>
+                        <h4>Bico de impressão</h4>
+                        <p>Ponteira calibrada (comumente de 0,4 mm) que define a largura do filamento depositado na peça.</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Mesa de impressão: Plataforma nivelada (frequentemente aquecida) onde a primeira camada adere.')">
+                        <span class="comp-num">5</span>
+                        <h4>Mesa de impressão</h4>
+                        <p>Superfície plana e nivelada (frequentemente aquecida) onde a peça é ancorada e construída.</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Motores: Motores de passo que convertem pulsos elétricos em rotações angulares de alta precisão.')">
+                        <span class="comp-num">6</span>
+                        <h4>Motores</h4>
+                        <p>Motores de passo de alta precisão que acionam correias, fusos e a engrenagem do extrusor.</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Eixos de movimentação (X, Y e Z): Guias lineares que posicionam o bico no espaço tridimensional.')">
+                        <span class="comp-num">7</span>
+                        <h4>Eixos de movimentação</h4>
+                        <p>Sistema cartesiano (X: largura, Y: profundidade, Z: altura das camadas) que guia a deposição.</p>
+                    </div>
+                    <div class="comp-item" onclick="highlightComp(this, 'Sistema de controle: Placa eletrônica que lê o G-code, comanda os motores e monitora os sensores térmicos.')">
+                        <span class="comp-num">8</span>
+                        <h4>Sistema de controle</h4>
+                        <p>Placa-mãe e sensores que interpretam o código G-code, regulam temperaturas e sincronizam movimentos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.3 DO MODELO DIGITAL AO OBJETO FÍSICO -->
+        <section id="fluxo">
+            <div class="section-header">
+                <span class="section-tag">3.3 Fluxo de Trabalho</span>
+                <h2 class="section-title">Do modelo digital ao objeto físico</h2>
+                <p class="section-subtitle">
+                    Para transformar uma ideia em uma peça real, o projeto percorre sete etapas técnicas sequenciais:
+                </p>
+            </div>
+
+            <div class="workflow-steps">
+                <div class="step-card">
+                    <div class="step-number">Etapa 1</div>
+                    <h4>Modelagem CAD</h4>
+                    <p>Criação da geometria tridimensional da peça em um software de Desenho Assistido por Computador (CAD), definindo suas dimensões exatas.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Etapa 2</div>
+                    <h4>Exportação do modelo 3D</h4>
+                    <p>Conversão do sólido paramétrico para um formato de malha de triângulos, como <strong>STL</strong>, <strong>OBJ</strong> ou <strong>3MF</strong>.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Etapa 3</div>
+                    <h4>Preparação no fatiador (slicer)</h4>
+                    <p>Importação do arquivo no software fatiador, onde se define a posição e a orientação ideal da peça sobre a mesa virtual.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Etapa 4</div>
+                    <h4>Configuração dos parâmetros</h4>
+                    <p>Definição da altura de camada, porcentagem de preenchimento interno (infill), velocidade, temperaturas, paredes e suportes.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Etapa 5</div>
+                    <h4>Geração do G-code</h4>
+                    <p>O fatiador divide o modelo em centenas de camadas horizontais e traduz tudo em coordenadas e instruções na linguagem <strong>G-code</strong>.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Etapa 6</div>
+                    <h4>Impressão</h4>
+                    <p>A impressora 3D executa o arquivo G-code, aquecendo o bico e a mesa e depositando o material camada por camada.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">Etapa 7</div>
+                    <h4>Remoção e acabamento</h4>
+                    <p>Retirada da peça da mesa após o resfriamento, remoção de estruturas de suporte e eventual pós-processamento superficial.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.4 COMPARAÇÃO ENTRE PLA E PETG -->
+        <section id="materiais">
+            <div class="section-header">
+                <span class="section-tag">3.4 Ciência dos Materiais</span>
+                <h2 class="section-title">Comparação entre PLA e PETG</h2>
+                <p class="section-subtitle">
+                    O <strong>PLA</strong> geralmente é mais fácil de imprimir e bastante utilizado em protótipos e peças decorativas. O <strong>PETG</strong> costuma ser escolhido para aplicações que exigem maior tenacidade e resistência térmica em relação ao PLA comum.
+                </p>
+            </div>
+
+            <div class="material-table-wrapper">
+                <table class="material-comparison">
+                    <thead>
+                        <tr>
+                            <th>Critério Comparativo</th>
+                            <th class="col-pla">PLA (Ácido Polilático)</th>
+                            <th class="col-petg">PETG (Polietileno Tereftalato Glicol)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Facilidade de impressão</strong></td>
+                            <td class="col-pla">Alta. Baixa contração térmica (empenamento mínimo) e excelente estabilidade dimensional em impressoras abertas.</td>
+                            <td class="col-petg">Moderada. Exige ajuste mais fino de retração (maior tendência a formar fios/stringing) e mesa aquecida.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Resistência mecânica</strong></td>
+                            <td class="col-pla">Boa rigidez superficial e resistência à tração estática, porém apresenta comportamento mais frágil sob impacto.</td>
+                            <td class="col-petg">Excelente equilíbrio entre resistência mecânica e absorção de choques sem fratura repentina.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Resistência térmica</strong></td>
+                            <td class="col-pla">Mais baixa (começa a amolecer próximo a 55 °C – 60 °C no PLA comum).</td>
+                            <td class="col-petg">Superior (suporta temperaturas de trabalho próximas a 70 °C – 80 °C sem deformar facilmente).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tenacidade e flexibilidade</strong></td>
+                            <td class="col-pla">Menor tenacidade; material mais rígido e propenso a ruptura abrupta quando flexionado além do limite.</td>
+                            <td class="col-petg">Maior tenacidade e leve flexibilidade antes de ceder, ideal para encaixes sob pressão (snap-fits).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aderência entre camadas</strong></td>
+                            <td class="col-pla">Boa aderência em condições padrão de impressão.</td>
+                            <td class="col-petg">Muito alta fusão química entre camadas, conferindo excelente coesão estrutural.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aplicações</strong></td>
+                            <td class="col-pla">Protótipos visuais e geométricos, maquetes, modelos educativos, gabaritos leves e peças decorativas.</td>
+                            <td class="col-petg">Suportes mecânicos, peças funcionais, componentes expostos a calor moderado ou ambientes externos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Limitações</strong></td>
+                            <td class="col-pla">Sensível a ambientes quentes (como o interior de veículos ao sol) e menor resistência ao impacto.</td>
+                            <td class="col-petg">Mais sensível à absorção de umidade do ar e pode aderir excessivamente a certas superfícies de mesa.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note-box">
+                <strong>Nota técnica importante:</strong> As propriedades finais de qualquer peça impressa variam conforme o fabricante do filamento, a formulação específica (como aditivos no PLA Mais ou PETG XT), a geometria do modelo e os parâmetros de impressão (temperatura, orientação das camadas, número de perímetros e preenchimento).
+            </div>
+        </section>
+
+        <!-- 3.5 APLICAÇÕES -->
+        <section id="aplicacoes">
+            <div class="section-header">
+                <span class="section-tag">3.5 Áreas de Atuação</span>
+                <h2 class="section-title">Aplicações da Impressão 3D</h2>
+                <p class="section-subtitle">
+                    A manufatura aditiva está presente em múltiplos setores produtivos, científicos e acadêmicos:
+                </p>
+            </div>
+
+            <div class="apps-grid">
+                <div class="app-card">
+                    <h4>⚙️ Engenharia mecânica</h4>
+                    <p>Fabricação de suportes funcionais, engrenagens para bancadas de teste, gabaritos de montagem e alojamentos de sensores.</p>
+                </div>
+                <div class="app-card">
+                    <h4>📐 Prototipagem</h4>
+                    <p>Validação rápida de forma, ergonomia, montagem e interferência mecânica antes do investimento em ferramental definitivo.</p>
+                </div>
+                <div class="app-card">
+                    <h4>🩺 Medicina</h4>
+                    <p>Produção de biomodelos anatômicos para planejamento cirúrgico, órteses sob medida, próteses personalizadas e guias odontológicos.</p>
+                </div>
+                <div class="app-card">
+                    <h4>🏛️ Arquitetura</h4>
+                    <p>Construção de maquetes volumétricas detalhadas, estudos de insolação, topografia e elementos estruturais complexos.</p>
+                </div>
+                <div class="app-card">
+                    <h4>🎓 Educação</h4>
+                    <p>Materialização de conceitos abstratos de física, química, matemática e engenharia para aprendizagem prática em laboratório.</p>
+                </div>
+                <div class="app-card">
+                    <h4>🏭 Indústria</h4>
+                    <p>Produção de dispositivos de fixação na linha de montagem, peças de reposição sob demanda e componentes de baixo volume.</p>
+                </div>
+                <div class="app-card">
+                    <h4>🎨 Design</h4>
+                    <p>Desenvolvimento de produtos de consumo, luminárias, mobiliário autoral e geometrias orgânicas inviáveis por moldagem convencional.</p>
+                </div>
+                <div class="app-card">
+                    <h4>♻️ Sustentabilidade</h4>
+                    <p>Pesquisa em reciclagem de polímeros (como reaproveitamento de garrafas PET em filamento) e reparo local de equipamentos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.6 VANTAGENS E LIMITAÇÕES -->
+        <section id="vantagens-limitacoes">
+            <div class="section-header">
+                <span class="section-tag">3.6 Análise Técnica</span>
+                <h2 class="section-title">Vantagens e limitações</h2>
+                <p class="section-subtitle">
+                    Compreender os pontos fortes e as restrições da manufatura aditiva é essencial para tomar boas decisões de engenharia.
+                </p>
+            </div>
+
+            <div class="comparison-two-col">
+                <div class="card" style="border-top: 4px solid var(--teal-accent);">
+                    <h3 style="font-size: 1.15rem; color: var(--primary-dark);">Principais Benefícios</h3>
+                    <ul class="pros-cons-list">
+                        <li><span class="icon-pro">✓</span> <div><strong>Personalização:</strong> Criação de peças únicas ou adaptadas a cada projeto sem custo adicional de moldes.</div></li>
+                        <li><span class="icon-pro">✓</span> <div><strong>Liberdade geométrica:</strong> Fabricação de cavidades internas, treliças e formas orgânicas complexas.</div></li>
+                        <li><span class="icon-pro">✓</span> <div><strong>Prototipagem rápida:</strong> Redução drástica do tempo entre o desenho no CAD e o teste físico na bancada.</div></li>
+                        <li><span class="icon-pro">✓</span> <div><strong>Fabricação sob demanda:</strong> Produção local apenas da quantidade necessária, reduzindo estoques físicos.</div></li>
+                        <li><span class="icon-pro">✓</span> <div><strong>Possibilidade de reduzir desperdícios:</strong> Em determinadas aplicações, deposita-se apenas o material necessário para a peça e seus suportes.</div></li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-top: 4px solid #F59E0B;">
+                    <h3 style="font-size: 1.15rem; color: var(--primary-dark);">Principais Limitações</h3>
+                    <ul class="pros-cons-list">
+                        <li><span class="icon-con">!</span> <div><strong>Tempo de fabricação:</strong> Peças grandes ou maciças podem levar várias horas para serem concluídas.</div></li>
+                        <li><span class="icon-con">!</span> <div><strong>Volume de impressão limitado:</strong> O tamanho máximo da peça é restrito à área útil da mesa e à altura do eixo Z da máquina.</div></li>
+                        <li><span class="icon-con">!</span> <div><strong>Acabamento superficial:</strong> As linhas de camada permanecem visíveis, podendo exigir lixamento ou pós-processamento.</div></li>
+                        <li><span class="icon-con">!</span> <div><strong>Anisotropia mecânica:</strong> Variação das propriedades mecânicas conforme a orientação das camadas (a resistência à tração no eixo Z costuma ser menor que no plano XY).</div></li>
+                        <li><span class="icon-con">!</span> <div><strong>Manutenção e calibração:</strong> Exige nivelamento periódico da mesa, limpeza de bico e controle de umidade dos filamentos.</div></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.7 CURIOSIDADES ("VOCÊ SABIA?") -->
+        <section id="curiosidades">
+            <div class="section-header">
+                <span class="section-tag">3.7 Você sabia?</span>
+                <h2 class="section-title">Curiosidades históricas e científicas</h2>
+            </div>
+
+            <div class="curiosity-grid">
+                <div class="curiosity-card">
+                    <span class="curiosity-tag">História • Década de 1980</span>
+                    <h4 style="margin: 0.4rem 0; color: var(--primary-dark);">O surgimento da tecnologia</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-muted);">
+                        A impressão 3D surgiu na década de 1980: em 1984, Chuck Hull registrou a patente da estereolitografia (SLA) utilizando resina fotossensível, e em 1989 Scott Crump patenteou o processo FDM (modelagem por fusão e deposição).
+                    </p>
+                </div>
+                <div class="curiosity-card">
+                    <span class="curiosity-tag">Ciência Aberta • RepRap</span>
+                    <h4 style="margin: 0.4rem 0; color: var(--primary-dark);">Impressoras que imprimem impressoras</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-muted);">
+                        A popularização mundial das impressoras FDM de bancada foi impulsionada pelo projeto aberto <em>RepRap</em>, iniciado em 2005 na Universidade de Bath (Reino Unido), com o objetivo de criar máquinas autorreplicantes de código aberto.
+                    </p>
+                </div>
+                <div class="curiosity-card">
+                    <span class="curiosity-tag">Engenharia • Preenchimento</span>
+                    <h4 style="margin: 0.4rem 0; color: var(--primary-dark);">Peças fortes sem serem maciças</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-muted);">
+                        A maioria das peças impressas em 3D não é 100% sólida por dentro: os softwares fatiadores geram padrões geométricos internos (como grade, colmeia ou giroide) que garantem rigidez estrutural economizando material e tempo.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SEÇÃO DE RESULTADOS — A IMPRESSÃO 3D EM NÚMEROS -->
+        <section id="resultados">
+            <div class="section-header">
+                <span class="section-tag">5. Resultados Reais — Campus Nova Iguaçu</span>
+                <h2 class="section-title">A impressão 3D em números</h2>
+                <p class="section-subtitle">
+                    Explore os gráficos interativos recriados a partir dos registros reais de atividades do laboratório no Campus Nova Iguaçu.
+                </p>
+            </div>
+
+            <div class="charts-container">
+                <!-- 5.1 Distribuição de impressões por projeto -->
+                <div class="chart-card">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                            <h3 style="font-size: 1.15rem; color: var(--primary-dark);">5.1. Distribuição de impressões por projeto</h3>
+                            <span style="background: var(--primary-dark); color: #fff; padding: 0.25rem 0.7rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700;">
+                                Total: 43 impressões (100%)
+                            </span>
+                        </div>
+                        <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 0.35rem;">
+                            Toque em uma fatia do gráfico ou nos botões abaixo para inspecionar cada categoria:
+                        </p>
+
+                        <div class="interactive-filter-btns" role="group" aria-label="Categorias de projetos">
+                            <button class="cat-chip active" onclick="selectCategory(0, this)">Projeto Final (46,5%)</button>
+                            <button class="cat-chip" onclick="selectCategory(1, this)">Projeto de Eólica (37,2%)</button>
+                            <button class="cat-chip" onclick="selectCategory(2, this)">Eventos Externos • EXPIN 48 (16,3%)</button>
+                        </div>
+
+                        <div id="category-readout" class="selected-cat-readout">
+                            📌 <strong>Projeto Final:</strong> 20 impressões registradas (46,5% do total de 43 impressões).
+                        </div>
+
+                        <div class="canvas-holder">
+                            <canvas id="projectsDoughnutChart" aria-label="Gráfico de rosca da distribuição de 43 impressões por projeto"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="analysis-box">
+                        <strong>Análise dos dados:</strong> "A distribuição das 43 impressões demonstra que o Projeto Final concentrou a maior parcela da produção, com 46,5% do total, seguido pelo Projeto de Eólica, com 37,2%. Os 16,3% restantes correspondem a atividades externas realizadas em apoio à EXPIN 48."
+                    </div>
+                </div>
+
+                <!-- 5.2 Consumo de filamentos -->
+                <div class="chart-card">
+                    <div>
+                        <h3 style="font-size: 1.15rem; color: var(--primary-dark);">5.2. Consumo de filamentos (em gramas)</h3>
+                        <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 0.35rem;">
+                            Comparativo entre o consumo acumulado de PLA / PLA Mais e PETG / PETG XT:
+                        </p>
+
+                        <div class="highlight-banner-27">
+                            📊 27% mais PLA utilizado em relação ao PETG.
+                        </div>
+
+                        <div class="bar-canvas-holder">
+                            <canvas id="filamentBarChart" aria-label="Gráfico de barras comparativo de consumo de filamento PLA e PETG"></canvas>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; text-align: center; font-size: 0.8rem; margin-top: 0.5rem;">
+                            <div style="background: #F0F9FF; padding: 0.5rem; border-radius: 6px; border: 1px solid #BAE6FD;">
+                                <strong style="color: #0284C7;">PLA / PLA Mais</strong><br>5.834 g (5,834 kg)
+                            </div>
+                            <div style="background: #F0FDFA; padding: 0.5rem; border-radius: 6px; border: 1px solid #99F6E4;">
+                                <strong style="color: #0D9488;">PETG / PETG XT</strong><br>4.592 g (4,592 kg)
+                            </div>
+                            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                                <strong>Diferença</strong><br>1.242 g (1,242 kg)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-box">
+                        <strong>Análise dos dados:</strong> "Os registros apresentados indicam um consumo de 5,834 kg de PLA e 4,592 kg de PETG, representando uma diferença de 1,242 kg. Assim, o consumo de PLA foi aproximadamente 27% superior ao de PETG. A facilidade de impressão do PLA pode contribuir para sua utilização em prototipagem e atividades educacionais, embora os dados de consumo, isoladamente, não permitam determinar as causas dessa diferença."
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5.3 Resumo Visual -->
+            <div style="margin-top: 2rem;">
+                <h3 style="font-size: 1.15rem; color: var(--primary-dark);">5.3. Resumo visual dos indicadores</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.25rem;">
+                    Os cartões abaixo sintetizam os resultados levantados. Importante observar que os dados representam <strong>duas dimensões diferentes</strong>: a distribuição quantitativa das impressões por categoria de projeto e o consumo total em massa de cada família de filamento.
+                </p>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value">43</div>
+                        <div class="kpi-label">Impressões registradas</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" style="color: var(--chart-green);">20</div>
+                        <div class="kpi-label">Impressões no Projeto Final (46,5%)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" style="color: var(--chart-blue);">16</div>
+                        <div class="kpi-label">Impressões no Projeto de Eólica (37,2%)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" style="color: var(--chart-orange);">7</div>
+                        <div class="kpi-label">Impressões em Eventos Externos • EXPIN 48 (16,3%)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" style="color: var(--vibrant-blue);">5,834 kg</div>
+                        <div class="kpi-label">Consumo de PLA / PLA Mais (5.834 g)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" style="color: var(--teal-accent);">4,592 kg</div>
+                        <div class="kpi-label">Consumo de PETG / PETG XT (4.592 g)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" style="color: var(--primary-dark);">1,242 kg</div>
+                        <div class="kpi-label">Diferença de consumo (1.242 g)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SEÇÃO ESPECIAL — INOVACOM 3D -->
+        <section id="inovacom">
+            <div class="section-header">
+                <span class="section-tag">4. Projeto Institucional</span>
+                <h2 class="section-title">Sobre o Projeto InovaCom 3D</h2>
+                <p class="section-subtitle">
+                    O <strong>InovaCom 3D</strong> é um projeto de ensino e disseminação de conhecimentos voltado à manufatura aditiva no <strong>Campus Nova Iguaçu</strong>.
+                </p>
+            </div>
+
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 0.5rem;">
+                    Formação prática em Engenharia e Desenvolvimento de Protótipos
+                </h3>
+                <p style="font-size: 0.92rem; color: var(--text-muted);">
+                    A impressão 3D desempenha um papel estratégico na formação de estudantes de engenharia ao conectar a teoria de sala de aula — como desenho técnico, modelagem CAD, resistência dos materiais e processos de fabricação — à materialização de soluções reais. No laboratório, os alunos vivenciam o ciclo completo de projeto, testando encaixes, corrigindo falhas geométricas e desenvolvendo protótipos funcionais para projetos acadêmicos e eventos científicos.
+                </p>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>Projeto InovaCom 3D — Campus Nova Iguaçu</strong></p>
+        <p style="margin-top: 0.35rem;">Plataforma Educativa Interativa sobre Impressão 3D e Manufatura Aditiva • Acesso via QR Code</p>
+    </footer>
+
+    <!-- Scripts de Interatividade e Gráficos -->
+    <script>
+        // 1. Interação dos componentes da Impressora 3D (Seção 3.2)
+        function highlightComp(element, descriptionText) {
+            document.querySelectorAll('.comp-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('component-Status-Text').textContent = descriptionText;
+        }
+
+        // 2. Dados e Gráfico de Rosca: Distribuição de Impressões por Projeto (Seção 5.1)
+        const projectCategories = [
+            { nome: 'Projeto Final', qtd: 20, perc: '46,5%', cor: '#10B981', detalhe: '20 impressões registradas (46,5% do total de 43 impressões).' },
+            { nome: 'Projeto de Eólica', qtd: 16, perc: '37,2%', cor: '#0284C7', detalhe: '16 impressões registradas (37,2% do total de 43 impressões).' },
+            { nome: 'Eventos Externos (Apoio à EXPIN 48)', qtd: 7, perc: '16,3%', cor: '#F59E0B', detalhe: '7 impressões registradas em apoio à EXPIN 48 (16,3% do total de 43 impressões).' }
+        ];
+
+        // Plugin simples para desenhar os percentuais diretamente nas fatias e o total 43 no centro
+        const doughnutLabelsPlugin = {
+            id: 'doughnutLabelsPlugin',
+            afterDraw(chart) {
+                const { ctx, chartArea: { width, height, top, left } } = chart;
+                ctx.save();
+
+                // Texto central: 43 Impressões
+                ctx.font = '800 22px Inter, sans-serif';
+                ctx.fillStyle = '#0F172A';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('43', left + width / 2, top + height / 2 - 8);
+
+                ctx.font = '600 11px Inter, sans-serif';
+                ctx.fillStyle = '#475569';
+                ctx.fillText('IMPRESSÕES', left + width / 2, top + height / 2 + 12);
+
+                // Percentuais sobre cada fatia
+                const meta = chart.getDatasetMeta(0);
+                meta.data.forEach((arc, index) => {
+                    const center = arc.tooltipPosition();
+                    ctx.font = '700 12px Inter, sans-serif';
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillText(projectCategories[index].perc, center.x, center.y);
+                });
+                ctx.restore();
+            }
+        };
+
+        const ctxDoughnut = document.getElementById('projectsDoughnutChart').getContext('2d');
+        const doughnutChart = new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Projeto Final', 'Projeto de Eólica', 'Eventos Externos (EXPIN 48)'],
+                datasets: [{
+                    data: [20, 16, 7],
+                    backgroundColor: ['#10B981', '#0284C7', '#F59E0B'],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 3,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '62%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 16,
+                            font: { family: 'Inter', size: 12, weight: '600' }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const cat = projectCategories[context.dataIndex];
+                                return ` ${cat.nome}: ${cat.qtd} impressões (${cat.perc})`;
+                            }
+                        }
+                    }
+                },
+                onClick: (evt, elements) => {
+                    if (elements.length > 0) {
+                        const idx = elements[0].index;
+                        const buttons = document.querySelectorAll('.cat-chip');
+                        selectCategory(idx, buttons[idx]);
+                    }
+                }
+            },
+            plugins: [doughnutLabelsPlugin]
+        });
+
+        function selectCategory(index, btnElement) {
+            document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+            const cat = projectCategories[index];
+            document.getElementById('category-readout').innerHTML = `📌 <strong>${cat.nome}:</strong> ${cat.detalhe}`;
+        }
+
+        // 3. Gráfico de Barras: Consumo de Filamentos em Gramas (Seção 5.2)
+        const barValuesPlugin = {
+            id: 'barValuesPlugin',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                ctx.save();
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.data.forEach((bar, index) => {
+                        const val = dataset.data[index];
+                        const kgText = (val / 1000).toFixed(3).replace('.', ',') + ' kg';
+                        ctx.font = '700 12px Inter, sans-serif';
+                        ctx.fillStyle = '#0F172A';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`${val.toLocaleString('pt-BR')} g (${kgText})`, bar.x, bar.y - 8);
+                    });
+                });
+                ctx.restore();
+            }
+        };
+
+        const ctxBar = document.getElementById('filamentBarChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['PLA / PLA Mais', 'PETG / PETG XT'],
+                datasets: [{
+                    label: 'Consumo em gramas (g)',
+                    data: [5834, 4592],
+                    backgroundColor: ['#0284C7', '#0D9488'],
+                    borderRadius: 8,
+                    maxBarThickness: 72
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: { top: 26 }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 6800,
+                        title: {
+                            display: true,
+                            text: 'Massa consumida (g)',
+                            font: { family: 'Inter', weight: '600', size: 12 }
+                        },
+                        ticks: {
+                            callback: value => value.toLocaleString('pt-BR') + ' g'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { family: 'Inter', weight: '700', size: 12 }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => ` Consumo: ${ctx.raw.toLocaleString('pt-BR')} g (${(ctx.raw/1000).toFixed(3).replace('.', ',')} kg)`
+                        }
+                    }
+                }
+            },
+            plugins: [barValuesPlugin]
+        });
+
+    </script>
+</body>
+</html>
